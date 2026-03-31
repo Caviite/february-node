@@ -3,7 +3,7 @@ const { getProduct, addProduct, updateProduct, getSingleProduct } = require('../
 const router = express.Router();
 const authenticate = require('../middleware/token');
 const { checkRole } = require("../middleware/adminRole");
-const upload = require('../middleware/multer');
+const { upload } = require('../middleware/multer');
 
 
 router.get('/', getProduct);

@@ -1,8 +1,8 @@
 const Product = require("../model/product");
+const cloudinary = require("cloudinary").v2;
 
 const addProduct = async (req, res) => {
     const { title, price, description } = req.body;
-    log
     try {
         if (!title || !price || !description || !req.file) {
             return res.status(401).json({ message: "all fields are required" });
@@ -37,64 +37,60 @@ const addProduct = async (req, res) => {
         res.status(500).json({ message: error.message });
         console.log(error, error.message);
     }
+};
 
-    const getProduct = async (req, res) => {
-        try {
-            const product = await Product.find();
-            if (product) {
-                return res
-                    .status(200)
-                    .json({ message: "product retrieved Succefully", product });
+const getProduct = async (req, res) => {
+    try {
+        const product = await Product.find();
+        if (product) {
+            return res
+                .status(200)
+                .json({ message: "product retrieved Succefully", product });
 
-            }
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-            console.log(error, error.message);
         }
-    };
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.log(error, error.message);
+    }
+};
 
-    const updateProduct = async (req, res) => {
-        const id = req.params.id;
-        try {
-            const product = await Product.findByIdAndUpdate(id, req.body, { new: true });
-            if (product) {
-                return res.status(200).json({ message: "Product updated successfully", product });
-            } else {
-                return res.status(404).json({ message: "Product not found" });
-            }
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-            console.log(error, error.message);
+const updateProduct = async (req, res) => {
+    const id = req.params.id;
+    try {
+        const product = await Product.findByIdAndUpdate(id, req.body, { new: true });
+        if (product) {
+            return res.status(200).json({ message: "Product updated successfully", product });
+        } else {
+            return res.status(404).json({ message: "Product not found" });
         }
-    };
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.log(error, error.message);
+    }
+};
 
-    const getSingleProduct = async (req, res) => {
-        const id = req.params.id;
+const getSingleProduct = async (req, res) => {
+    const id = req.params.id;
 
-        try {
-            const product = await Product.findById(id);
+    try {
+        const product = await Product.findById(id);
 
-            if (!product) {
-                return res.status(404).json({ message: "Product not found" });
-            }
-
-            return res.status(200).json({
-                message: "Product retrieved successfully",
-                product
-            });
-
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-            console.log(error, error.message);
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
         }
-    };
 
-    module.exports = { addProduct, getProduct, updateProduct, getSingleProduct };
+        return res.status(200).json({
+            message: "Product retrieved successfully",
+            product
+        });
 
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.log(error, error.message);
+    }
+};
 
-
-
-}
+module.exports = { addProduct, getProduct, updateProduct, getSingleProduct };
 // mongodb+srv://caviti:7O1RfmQVvwycxlih@cluster0.kkgsknc.mongodb.net/?appName=Cluster0
 
 

@@ -44,3 +44,32 @@ exports.addToCart = async (req, res) => {
         return res.status(500).json({ message: "Server error" });
     }
 };
+
+exports.getCartItems = async (req, res) => {
+    try {
+        const cart = await Cart.findOne({ user: req.user.id }).populate('items.product');
+        if (!cart) {
+            return res.status(404).json({ message: "Cart not found" });
+        }
+        return res.status(200).json({ message: "Cart items retrieved successfully", cart });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Server error" });
+    }
+};
+
+exports.removeFromCart = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const cart = await Cart.findOne({ user: req.user.id });
+        if (!cart) {
+            return res.status(404).json({ message: "Cart not found" });
+        }
+        cart.items = cart.items.filter(item => item._id.toString() !== id);
+        await cart.save();
+        return res.status(200).json({ message: "Item removed from cart successfully", cart });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Server error" });
+    }
+};
