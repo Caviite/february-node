@@ -9,7 +9,15 @@ const connectDB = require('./Config/db.js');
 const env = require("./Config/env.js");
 const cors = require("cors");
 
-app.use(cors({origin: "http://localhost:5173"}));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://feburary-react.vercel.app"
+];
+
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true
+}));
 app.use("/product", productRoute)
 app.use("/cart", cartRoute)
 app.use("/auth", userRoute)
